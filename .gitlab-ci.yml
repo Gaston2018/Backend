@@ -1,0 +1,34 @@
+stages:
+  - install
+  - test
+  - audit
+
+default:
+  image: node:18-alpine
+
+cache:
+  key: "$CI_COMMIT_REF_SLUG"
+  paths:
+    - node_modules/
+
+install:
+  stage: install
+  script:
+    - npm install
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: 1 hour
+
+unit-tests:
+  stage: test
+  needs: [install]
+  script:
+    - npm test
+
+npm-audit:
+  stage: audit
+  needs: [install]
+  script:
+    - npm audit --audit-level=high
+  allow_failure: true
