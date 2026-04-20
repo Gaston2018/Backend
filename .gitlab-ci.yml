@@ -1,0 +1,78 @@
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+
+stages:
+  - install
+  - test
+  - audit
+  - .gitlab-security-scans
+
+default:
+  image: node:18-alpine
+
+# Cache por lockfile + rama para mayor precision y velocidad
+cache:
+  key:
+    files:
+      - package-lock.json
+    prefix: "$CI_COMMIT_REF_SLUG"
+  paths:
+    - node_modules/
+  policy: pull  # Los jobs solo leen cache; install la escribe
+
+install:
+  stage: install
+  cache:
+    key:
+      files:
+        - package-lock.json
+      prefix: "$CI_COMMIT_REF_SLUG"
+    paths:
+      - node_modules/
+    policy: push  # Solo este job actualiza la cache
+  script:
+    # Generar lockfile si no existe (primera vez o si fue ignorado)
+    - |
+      if [ ! -f package-lock.json ]; then
+        echo "package-lock.json no encontrado, generando con npm install..."
+        npm install
+      else
+        echo "package-lock.json encontrado, usando npm ci..."
+        npm ci
+      fi
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH'
+
+unit-tests:
+  stage: test
+  needs: [install]
+  script:
+    - npm test -- --coverage --coverageReporters=text-summary --coverageReporters=cobertura
+  coverage: '/Statements\s*:\s*(\d+\.?\d*)%/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+    expire_in: 1 week
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH'
+
+npm-audit:
+  stage: audit
+  needs: [install]
+  script:
+    # Generar lockfile si no existe (requerido por npm audit)
+    - |
+      if [ ! -f package-lock.json ]; then
+        npm i --package-lock-only
+      fi
+    - npm audit --audit-level=high
+  allow_failure: false  # Falla el pipeline si hay vulnerabilidades altas
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
