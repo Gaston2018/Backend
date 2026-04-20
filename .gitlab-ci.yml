@@ -66,6 +66,11 @@ npm-audit:
   stage: audit
   needs: [install]
   script:
+    # Generar lockfile si no existe (requerido por npm audit)
+    - |
+      if [ ! -f package-lock.json ]; then
+        npm i --package-lock-only
+      fi
     - npm audit --audit-level=high
   allow_failure: false  # Falla el pipeline si hay vulnerabilidades altas
   rules:
