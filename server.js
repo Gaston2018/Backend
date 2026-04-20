@@ -19,14 +19,18 @@ app.get('/tasks', (req, res) => {
 
 // POST /tasks
 app.post('/tasks', (req, res) => {
-  const { title, description } = req.body;
+  const { title, description, createdBy } = req.body;
   if (!title || title.trim() === '') {
     return res.status(400).json({ error: 'Title is required' });
+  }
+  if (!createdBy || createdBy.trim() === '') {
+    return res.status(400).json({ error: 'createdBy is required' });
   }
   const task = {
     id: nextId++,
     title: title.trim(),
     description: description ? description.trim() : '',
+    createdBy: createdBy.trim(),
     completed: false,
     createdAt: new Date().toISOString()
   };

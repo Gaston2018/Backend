@@ -60,6 +60,7 @@
       <h2>Nueva Tarea</h2>
       <p id="error-msg"></p>
       <input type="text" id="task-title" placeholder="Titulo de la tarea *" />
+      <input type="text" id="task-creator" placeholder="Tu nombre (creador) *" />
       <textarea id="task-desc" placeholder="Descripcion (opcional)"></textarea>
       <button class="btn-primary" onclick="createTask()">+ Agregar Tarea</button>
     </div>
@@ -87,7 +88,7 @@
           <div class="task-body">
             <div class="task-title">${esc(t.title)}</div>
             ${t.description ? `<div class="task-desc">${esc(t.description)}</div>` : ''}
-            <div class="task-meta">Creada: ${new Date(t.createdAt).toLocaleString()}</div>
+            <div class="task-meta">Creada por: <strong>${esc(t.createdBy)}</strong> &middot; ${new Date(t.createdAt).toLocaleString()}</div>
             <div class="task-actions">
               <button class="btn-danger" onclick="deleteTask(${t.id})">Eliminar</button>
             </div>
@@ -97,6 +98,7 @@
 
     async function createTask() {
       const title = document.getElementById('task-title').value.trim();
+      const createdBy = document.getElementById('task-creator').value.trim();
       const description = document.getElementById('task-desc').value.trim();
       const errEl = document.getElementById('error-msg');
       if (!title) {
@@ -104,13 +106,19 @@
         errEl.style.display = 'block';
         return;
       }
+      if (!createdBy) {
+        errEl.textContent = 'El nombre del creador es obligatorio.';
+        errEl.style.display = 'block';
+        return;
+      }
       errEl.style.display = 'none';
       await fetch(API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, description })
+        body: JSON.stringify({ title, description, createdBy })
       });
       document.getElementById('task-title').value = '';
+      document.getElementById('task-creator').value = '';
       document.getElementById('task-desc').value = '';
       fetchTasks();
     }
