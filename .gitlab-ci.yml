@@ -30,5 +30,6 @@ npm-audit:
   stage: audit
   needs: [install]
   script:
+    - npm i --package-lock-only
     - npm audit --audit-level=high
   allow_failure: true
