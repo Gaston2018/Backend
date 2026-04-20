@@ -33,7 +33,15 @@ install:
       - node_modules/
     policy: push  # Solo este job actualiza la cache
   script:
-    - npm ci  # Mas rapido y deterministico que npm install
+    # Generar lockfile si no existe (primera vez o si fue ignorado)
+    - |
+      if [ ! -f package-lock.json ]; then
+        echo "package-lock.json no encontrado, generando con npm install..."
+        npm install
+      else
+        echo "package-lock.json encontrado, usando npm ci..."
+        npm ci
+      fi
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH'
