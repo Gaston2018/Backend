@@ -12,30 +12,54 @@ stages:
 default:
   image: node:18-alpine
 
+# Cache por lockfile + rama para mayor precision y velocidad
 cache:
-  key: "$CI_COMMIT_REF_SLUG"
+  key:
+    files:
+      - package-lock.json
+    prefix: "$CI_COMMIT_REF_SLUG"
   paths:
     - node_modules/
+  policy: pull  # Los jobs solo leen cache; install la escribe
 
 install:
   stage: install
-  script:
-    - npm install
-  artifacts:
+  cache:
+    key:
+      files:
+        - package-lock.json
+      prefix: "$CI_COMMIT_REF_SLUG"
     paths:
       - node_modules/
-    expire_in: 1 hour
+    policy: push  # Solo este job actualiza la cache
+  script:
+    - npm ci  # Mas rapido y deterministico que npm install
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH'
 
 unit-tests:
   stage: test
   needs: [install]
   script:
-    - npm test
+    - npm test -- --coverage --coverageReporters=text-summary --coverageReporters=cobertura
+  coverage: '/Statements\s*:\s*(\d+\.?\d*)%/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+    expire_in: 1 week
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH'
 
 npm-audit:
   stage: audit
   needs: [install]
   script:
-    - npm i --package-lock-only
     - npm audit --audit-level=high
-  allow_failure: true
+  allow_failure: false  # Falla el pipeline si hay vulnerabilidades altas
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
