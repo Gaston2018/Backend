@@ -12,6 +12,7 @@
 
 ## Reglas
 
+- Generar la app en un branch llamado feature/mi-app
 - Código modular
 - Manejo de errores
 - Validaciones
@@ -21,3 +22,16 @@
 - Estructura de proyecto
 - Código base
 - Instrucciones para correr la app
+
+## Testing
+
+- Generar test unitarios para cada endpoint
+- Usar framework estándar del lenguaje
+
+## CI/CD
+
+- Generar archivo .gitlab-ci.yml
+- Incluir:
+    - build
+    - test
+    - lint
