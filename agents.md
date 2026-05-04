@@ -16,6 +16,7 @@
 - Código modular
 - Manejo de errores
 - Validaciones
+- Los nombres de las variables deben contener "epi-data"
 
 ## Output esperado
 
