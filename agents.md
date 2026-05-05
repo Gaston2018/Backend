@@ -17,6 +17,7 @@
 - Manejo de errores
 - Validaciones
 - Los nombres de las variables deben contener "epi-data"
+- step de build debe utilizar npm install y no npm ci porque sino falla el pipeline.
 
 ## Output esperado
 
