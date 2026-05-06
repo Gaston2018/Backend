@@ -40,4 +40,4 @@
 
 ## CODE REVIEW
 
-- Asignar el MR generado a @duo-code-review-epidata
+- Asignar el MR generado a @GitLabDuo
