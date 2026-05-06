@@ -37,7 +37,3 @@
     - build
     - test
     - lint
-
-## CODE REVIEW
-
-- Asignar el MR generado a @GitLabDuo
