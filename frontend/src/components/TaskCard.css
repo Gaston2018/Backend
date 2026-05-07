@@ -1,0 +1,16 @@
+.epi-data-card { background: white; border-radius: 8px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; flex-direction: column; gap: 10px; transition: box-shadow 0.2s; }
+.epi-data-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+.epi-data-card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.epi-data-card-header h3 { font-size: 1rem; color: #222; flex: 1; }
+.epi-data-badge { font-size: 0.75rem; padding: 3px 10px; border-radius: 12px; font-weight: 600; white-space: nowrap; }
+.epi-data-status-pending { background: #fff3cd; color: #856404; }
+.epi-data-status-progress { background: #cce5ff; color: #004085; }
+.epi-data-status-done { background: #d4edda; color: #155724; }
+.epi-data-card-desc { font-size: 0.9rem; color: #555; line-height: 1.4; }
+.epi-data-card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+.epi-data-card-footer small { color: #999; font-size: 0.8rem; }
+.epi-data-card-actions { display: flex; gap: 8px; }
+.epi-data-btn-edit { background: #e8f0fe; color: #1a73e8; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
+.epi-data-btn-edit:hover { background: #d2e3fc; }
+.epi-data-btn-delete { background: #fce8e6; color: #c5221f; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
+.epi-data-btn-delete:hover { background: #f5c6c3; }

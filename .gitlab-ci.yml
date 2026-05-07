@@ -1,0 +1,88 @@
+stages:
+  - build
+  - test
+  - lint
+
+variables:
+  NODE_VERSION: "18"
+
+# ─── BACKEND ───────────────────────────────────────────────────────────────────
+
+build:backend:
+  stage: build
+  image: node:${NODE_VERSION}-alpine
+  script:
+    - cd backend
+    - npm install
+  artifacts:
+    paths:
+      - backend/node_modules/
+    expire_in: 1 hour
+  cache:
+    key: epi-data-backend-$CI_COMMIT_REF_SLUG
+    paths:
+      - backend/node_modules/
+
+test:backend:
+  stage: test
+  image: node:${NODE_VERSION}-alpine
+  needs: [build:backend]
+  script:
+    - cd backend
+    - npm install
+    - npm test
+  coverage: '/Lines\s*:\s*(\d+\.?\d*)%/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: backend/coverage/cobertura-coverage.xml
+    when: always
+
+lint:backend:
+  stage: lint
+  image: node:${NODE_VERSION}-alpine
+  needs: [build:backend]
+  script:
+    - cd backend
+    - npm install
+    - npm run lint
+
+# ─── FRONTEND ──────────────────────────────────────────────────────────────────
+
+build:frontend:
+  stage: build
+  image: node:${NODE_VERSION}-alpine
+  script:
+    - cd frontend
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - frontend/build/
+      - frontend/node_modules/
+    expire_in: 1 hour
+  cache:
+    key: epi-data-frontend-$CI_COMMIT_REF_SLUG
+    paths:
+      - frontend/node_modules/
+
+test:frontend:
+  stage: test
+  image: node:${NODE_VERSION}-alpine
+  needs: [build:frontend]
+  script:
+    - cd frontend
+    - npm install
+    - npm test
+  artifacts:
+    when: always
+
+lint:frontend:
+  stage: lint
+  image: node:${NODE_VERSION}-alpine
+  needs: [build:frontend]
+  script:
+    - cd frontend
+    - npm install
+    - npm run lint
