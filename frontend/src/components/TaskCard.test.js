@@ -8,14 +8,16 @@ const epiDataMockTask = {
   title: 'Tarea de prueba epi-data',
   description: 'Descripción de prueba',
   status: 'pendiente',
+  author: 'Juan epi-data',
   createdAt: '2024-01-15T10:00:00.000Z',
 };
 
 describe('TaskCard - epi-data', () => {
-  it('renderiza el título y descripción', () => {
+  it('renderiza el título, descripción y autor', () => {
     render(<TaskCard task={epiDataMockTask} onEdit={jest.fn()} onDelete={jest.fn()} />);
     expect(screen.getByText('Tarea de prueba epi-data')).toBeInTheDocument();
     expect(screen.getByText('Descripción de prueba')).toBeInTheDocument();
+    expect(screen.getByText(/Juan epi-data/)).toBeInTheDocument();
   });
 
   it('muestra el badge de estado correcto', () => {

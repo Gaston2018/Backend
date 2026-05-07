@@ -14,14 +14,14 @@ const getTaskById = (req, res) => {
 };
 
 const createTask = (req, res) => {
-  const { title, description, status } = req.body;
-  const epiDataNewTask = epiDataTaskService.create({ title, description, status });
+  const { title, description, status, author } = req.body;
+  const epiDataNewTask = epiDataTaskService.create({ title, description, status, author });
   res.status(201).json({ data: epiDataNewTask, message: 'Tarea creada exitosamente' });
 };
 
 const updateTask = (req, res) => {
-  const { title, description, status } = req.body;
-  const epiDataUpdatedTask = epiDataTaskService.update(req.params.id, { title, description, status });
+  const { title, description, status, author } = req.body;
+  const epiDataUpdatedTask = epiDataTaskService.update(req.params.id, { title, description, status, author });
   if (!epiDataUpdatedTask) {
     return res.status(404).json({ error: 'Tarea no encontrada' });
   }

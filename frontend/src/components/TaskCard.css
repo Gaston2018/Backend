@@ -7,6 +7,8 @@
 .epi-data-status-progress { background: #cce5ff; color: #004085; }
 .epi-data-status-done { background: #d4edda; color: #155724; }
 .epi-data-card-desc { font-size: 0.9rem; color: #555; line-height: 1.4; }
+.epi-data-card-author { font-size: 0.85rem; color: #1a73e8; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+.epi-data-author-icon { font-size: 0.9rem; }
 .epi-data-card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
 .epi-data-card-footer small { color: #999; font-size: 0.8rem; }
 .epi-data-card-actions { display: flex; gap: 8px; }

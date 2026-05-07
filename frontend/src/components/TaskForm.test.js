@@ -22,9 +22,19 @@ describe('TaskForm - epi-data', () => {
     const epiDataMockSubmit = jest.fn().mockResolvedValue();
     render(<TaskForm onSubmit={epiDataMockSubmit} editingTask={null} onCancel={jest.fn()} />);
     fireEvent.change(screen.getByLabelText(/Título/i), { target: { value: 'Tarea epi-data test' } });
+    fireEvent.change(screen.getByLabelText(/Autor/i), { target: { value: 'Juan epi-data' } });
     fireEvent.click(screen.getByText('Crear Tarea'));
     await waitFor(() => {
-      expect(epiDataMockSubmit).toHaveBeenCalledWith(expect.objectContaining({ title: 'Tarea epi-data test' }));
+      expect(epiDataMockSubmit).toHaveBeenCalledWith(expect.objectContaining({ title: 'Tarea epi-data test', author: 'Juan epi-data' }));
+    });
+  });
+
+  it('muestra error si se envía sin autor', async () => {
+    render(<TaskForm onSubmit={jest.fn()} editingTask={null} onCancel={jest.fn()} />);
+    fireEvent.change(screen.getByLabelText(/Título/i), { target: { value: 'Tarea epi-data' } });
+    fireEvent.click(screen.getByText('Crear Tarea'));
+    await waitFor(() => {
+      expect(screen.getByText('El autor es requerido')).toBeInTheDocument();
     });
   });
 

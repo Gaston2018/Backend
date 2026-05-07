@@ -17,6 +17,11 @@ function TaskCard({ task, onEdit, onDelete }) {
         <span className={`epi-data-badge ${epiDataStatus.className}`}>{epiDataStatus.label}</span>
       </div>
       {task.description && <p className="epi-data-card-desc">{task.description}</p>}
+      {task.author && (
+        <p className="epi-data-card-author">
+          <span className="epi-data-author-icon">👤</span> {task.author}
+        </p>
+      )}
       <div className="epi-data-card-footer">
         <small>{new Date(task.createdAt).toLocaleDateString('es-ES')}</small>
         <div className="epi-data-card-actions">

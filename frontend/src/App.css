@@ -1,4 +1,4 @@
-.epi-data-app { max-width: 900px; margin: 0 auto; padding: 20px; }
+.epi-data-app { max-width: 900px; margin: 0 auto; padding: 20px; min-height: 100vh; }
 .epi-data-header { background: #1a73e8; color: white; padding: 24px; border-radius: 8px; margin-bottom: 24px; text-align: center; }
 .epi-data-header h1 { font-size: 2rem; margin-bottom: 4px; }
 .epi-data-header p { opacity: 0.85; }

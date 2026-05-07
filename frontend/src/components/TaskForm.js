@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './TaskForm.css';
 
-const epiDataInitialState = { title: '', description: '', status: 'pendiente' };
+const epiDataInitialState = { title: '', description: '', status: 'pendiente', author: '' };
 const epiDataStatusOptions = [
   { value: 'pendiente', label: 'Pendiente' },
   { value: 'en-progreso', label: 'En Progreso' },
@@ -18,6 +18,7 @@ function TaskForm({ onSubmit, editingTask, onCancel }) {
         title: editingTask.title,
         description: editingTask.description || '',
         status: editingTask.status,
+        author: editingTask.author || '',
       });
     } else {
       setEpiDataFormData(epiDataInitialState);
@@ -33,6 +34,10 @@ function TaskForm({ onSubmit, editingTask, onCancel }) {
     setEpiDataFormError('');
     if (!epiDataFormData.title.trim()) {
       setEpiDataFormError('El título es requerido');
+      return;
+    }
+    if (!epiDataFormData.author.trim()) {
+      setEpiDataFormError('El autor es requerido');
       return;
     }
     try {
@@ -56,6 +61,16 @@ function TaskForm({ onSubmit, editingTask, onCancel }) {
           onChange={epiDataHandleChange}
           placeholder="Nombre de la tarea"
           required
+        />
+      </div>
+      <div className="epi-data-form-group">
+        <label htmlFor="epi-data-author">Autor *</label>
+        <input
+          id="epi-data-author"
+          name="author"
+          value={epiDataFormData.author}
+          onChange={epiDataHandleChange}
+          placeholder="Nombre de quien genera la tarea"
         />
       </div>
       <div className="epi-data-form-group">

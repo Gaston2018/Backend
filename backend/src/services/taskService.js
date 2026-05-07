@@ -6,12 +6,13 @@ const getAll = () => [...epiDataTasksStore];
 
 const getById = (id) => epiDataTasksStore.find((epiDataTask) => epiDataTask.id === id) || null;
 
-const create = ({ title, description = '', status = 'pendiente' }) => {
+const create = ({ title, description = '', status = 'pendiente', author = '' }) => {
   const epiDataNewTask = {
     id: uuidv4(),
     title: title.trim(),
     description: description.trim(),
     status,
+    author: author.trim(),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
@@ -19,7 +20,7 @@ const create = ({ title, description = '', status = 'pendiente' }) => {
   return epiDataNewTask;
 };
 
-const update = (id, { title, description, status }) => {
+const update = (id, { title, description, status, author }) => {
   const epiDataIndex = epiDataTasksStore.findIndex((t) => t.id === id);
   if (epiDataIndex === -1) return null;
   epiDataTasksStore[epiDataIndex] = {
@@ -27,6 +28,7 @@ const update = (id, { title, description, status }) => {
     ...(title !== undefined && { title: title.trim() }),
     ...(description !== undefined && { description: description.trim() }),
     ...(status !== undefined && { status }),
+    ...(author !== undefined && { author: author.trim() }),
     updatedAt: new Date().toISOString(),
   };
   return epiDataTasksStore[epiDataIndex];
